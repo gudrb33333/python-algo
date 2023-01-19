@@ -1,29 +1,30 @@
-from unittest import result
+def permutation(arr, visited, depth, temp):
+    global result
+    if depth == len(arr):
+        temp_test = list(temp) 
+        result.append(temp_test)
 
+    for i in arr:
+        if not visited[i - 1]:
+            visited[i - 1] = True
+            temp[depth] = i
+            permutation(arr, visited, depth + 1, temp)
+            visited[i - 1] = False
 
-class Solution:  
+def solution(n, k):
+    global result
     result = []
+    answer = 0
+    
+    arr = []
+    for i in range(n):
+        arr.append(i+1)
+    
+    temp = [0 for i in range(n)]
+    depth = 0
+    visited = [False for i in range(n)]
 
-    def dsf(self, limit: int, depth: int, temp_result: list[int], nums: list[int] ):
-        if depth == limit:
-            self.result.append(temp_result)
-            return
-
-        for num in nums:
-            self.dsf(limit, depth + 1, temp_result, nums)
-
-
-    def permute(self, nums: list[int]) -> list[list[int]]:
-        limit = len(nums)
-        depth = 0
-        temp_result = []
-        
-        self.dsf(limit, depth, temp_result, nums)
-        return self.result
-        
-
-
-nums = [1,2,3]
-test = Solution()
-
-test.permute(nums)
+    permutation(arr, visited, depth, temp)
+    
+    print(result)
+    return answer

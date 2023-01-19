@@ -3,15 +3,10 @@ from itertools import count
 
 class Solution:
     def dfs(self, grid: list[list[str]], row: int, column: int):
-        if(column < 0 or column >= len(grid[0]) or row < 0 or row >= len(grid)):
+        if(column < 0 or column >= len(grid[0]) or row < 0 or row >= len(grid) or grid[row][column] != '1'):
             return
 
         grid[row][column] = '#'
-
-        for row in len(grid):
-            for column in len(grid[0]):
-                print(grid[row][column])
-            print("\n")
 
         #동서남북 체크
         self.dfs(grid, row, column+1)
@@ -25,10 +20,10 @@ class Solution:
 
         count = 0
 
-        for row in len(grid):
-            for column in len(grid[0]):
+        for row in range(len(grid)):
+            for column in range(len(grid[0])):
                 if grid[row][column] == '1':
-                    self.dfs(row, column)
+                    self.dfs(grid, row, column)
                     count += 1
         
         return count
@@ -41,4 +36,5 @@ grid = [
         ["0","0","0","0","0"]
     ]
 
-
+sol = Solution()
+test = sol.numIslands(grid)

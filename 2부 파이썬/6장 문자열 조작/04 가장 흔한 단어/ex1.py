@@ -18,6 +18,13 @@ fixed_paragraph_list: List[str] = fixed_paragraph.split()
 
 print(fixed_paragraph_list)
 
+dict = collections.defaultdic(int)
+for item in fixed_paragraph_list:
+    if item not in banned:
+        dict[item] += 1
+
+print(dict)
+
 fixed_paragraph_list = filter(lambda x: x not in banned, fixed_paragraph_list)
 
 print(collections.Counter(fixed_paragraph_list).most_common(1)[0][0])
