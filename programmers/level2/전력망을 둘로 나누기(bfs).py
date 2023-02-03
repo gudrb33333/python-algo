@@ -1,5 +1,3 @@
-from collections import defaultdict, deque
-
 #그래프 bfs할때는
 #1.방문여부 체크 visited = [False] * (n + 1)
 #2.양방향 그래프인지 확인.
@@ -9,40 +7,46 @@ from collections import defaultdict, deque
 #       wire_dict[b] = a
 #3.queue를 활용.
 
-def bfs(start_point, cut_point, wires, n, wire_dict):
-    count = 1
-    visited = [False] * (n + 1)
-    q = deque([start_point])
-    visited[start_point] = True
+import collections
+
+def bfs(start_node, cut_node, wires_dict):
+
+    count = 0
+    visited = [False] * (len(wires_dict) + 1 )
+    q = collections.deque([start_node])
     
     while q:
-        p = q.popleft()
-        for next_p in wire_dict[p]:
-            if next_p == cut_point: continue
-            if visited[next_p] is True: continue
-            count += 1
-            q.append(next_p)
-            visited[next_p] = True
+        current_node = q.popleft()
+        if visited[current_node] == True:
+            continue
+        if cut_node == current_node:
+            continue
             
+        count += 1
+        visited[current_node] = True
+        next_node_list = wires_dict[current_node]
+        
+        for next_node in next_node_list:
+            q.append(next_node)
+
+    
     return count
 
 def solution(n, wires):
-    answer = 100000
-    # dictionary로 그래프 자료구조 저장
-    wire_dict = defaultdict(set)
-    for wire in wires:
-        wire_dict[wire[0]].add(wire[1])
-        wire_dict[wire[1]].add(wire[0])
+    answer = 10000000
+
+    wires_dict = collections.defaultdict(list)
     
-    # wire 하나를 끊는 모든 경우의 수에 대해 bfs로 조사
-    for wire in wires:
-        v1 = wire[0]
-        v2 = wire[1]
-        a = bfs(v1, v2, wires, n, wire_dict) 
-        b = bfs(v2, v1, wires, n, wire_dict)
-        diff = abs(a - b)
-        answer = min(diff, answer) # 두 전력망이 가지고 있는 송전탑 개수의 차이의 최소값 갱신
-        
+    for a, b in wires:
+        wires_dict[a].append(b)
+        wires_dict[b].append(a)
+    
+    for v1, v2 in wires:
+        value1 = bfs(v1, v2, wires_dict)
+        value2 = bfs(v2, v1, wires_dict)
+        diff = abs(value1 - value2)
+        answer = min(answer, diff)
+
     return answer
 
 wires = [[1,3],[2,3],[3,4],[4,5],[4,6],[4,7],[7,8],[7,9]]
